@@ -6,6 +6,6 @@ A little about me:
 
 - I am undertaking a degree in Computer Science. 
 - I am taking STATS 220 because the course teaches R programming.
-- I am interested in learning about R programming language.
+- I am interested in learning about the R programming language.
 
 A meme that captures how I currently feel about my university studies is ![](https://c.tenor.com/8druEACXtX8AAAAd/tenor.gif)
