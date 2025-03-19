@@ -13,4 +13,4 @@ This is *my* repo for **STATS 220**.
 
 A meme that captures how I currently feel about my university studies is:
 
-![](cirno_hates_math.gif "Cirno Hates Math")
+![Cirno Hates Math](cirno_hates_math.gif)
