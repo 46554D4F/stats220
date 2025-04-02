@@ -1,0 +1,161 @@
+---
+title: My dynamic report
+author: "Tony Lai"
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+
+```
+
+```{css}
+body {
+  font-size: 18px;
+  font-family: "Comic Sans MS", "Comic Sans", "Comfortaa", sans-serif;
+  background-color: #CCCCCC;
+}
+
+h1 {
+  color: #252525;
+  background-color: #EEEEEE;
+  font-weight: bold;
+  padding: 25px;
+  border: 3px solid #0000FF;
+  border-radius: 15px;
+}
+
+
+h2 {
+  color: #666666;
+  background-color: #EEEEEE;
+  font-weight: bold;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+
+p {
+  padding: 18px;
+  background-color: #FFFFFF;
+}
+
+```
+
+## Report on the Supermarket Self-Checkout Data
+
+This is a dynamic report on the data collected using the Supermarket Self-Checkout 
+Google Form created as part of this project. The data collected is the 
+observational data on self-checkout in different supermarkets, such as the 
+supermarket name, time spent using the self-checkout, and whether the 
+participant used their own shopping bags.
+
+```{r}
+
+# UPI: clai932
+
+library(magick)
+library(tidyverse)
+
+logged_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT8vi_kUbwrGA8GwRUrHYpYhr1NbdQbrVfyPAHGwVx3t3Iuf_WYxmvDI1eoH4fd8hWv71HwneG1E8y4/pub?gid=677484715&single=true&output=csv")
+
+
+# Rename variables of the data frame to snake_case
+latest_data <- logged_data %>%
+  rename(supermarket = 2,
+         duration = 3,
+         own_bag = 4)
+
+
+# Duration data
+min_duration <- min(latest_data$duration)
+max_duration <- max(latest_data$duration)
+mean_duration <- mean(latest_data$duration) %>% round(0)
+
+
+# Bar graph on whether participants used their own bags
+bag_bar_graph <- ggplot(data = latest_data) +
+  geom_bar((aes(x = own_bag, fill= own_bag))) +
+  labs(title = "How many participants brought their own bags to use at the self-checkout?",
+       subtitle = "Comparing customers who brought their own bags and those who didn't.",
+       x = "Used their own bag",
+       y = "Count")
+
+ggsave("bag_bar_graph.png")
+image_write(image_read("bag_bar_graph.png") %>% 
+              image_scale(600), "bag_bar_graph.png")
+
+
+# Calculate supermarket's average self-checkout duration
+woolworths_average <- filter(latest_data, supermarket == "Woolworths")$duration %>% 
+  mean() %>% round(0)
+
+new_world_average <- filter(latest_data, supermarket == "New World")$duration %>% 
+  mean() %>% round(0)
+
+paknsave_average <- filter(latest_data, supermarket == "PAK'nSAVE")$duration  %>% 
+  mean() %>% round(0)
+
+
+# Create a new data frame
+supermarket_average <- data.frame(supermarket = c("Woolworths", "New World", "PAK'nSAVE"), 
+                 average_duration = c(woolworths_average, new_world_average, paknsave_average))
+
+
+# Bar graph on what supermarket has the longest self-checkout on average
+supermarket_bar_graph <- ggplot(supermarket_average, aes(supermarket, average_duration, fill = supermarket)) +
+  geom_col() +
+  labs(title = "What supermarket has the longest self-checkout duration on average?",
+       subtitle = "Comparing supermarket and its self-checkout average duration.",
+       x = "Supermarket",
+       y = "Average Duration (in seconds)")
+
+ggsave("supermarket_bar_graph.png")
+image_write(image_read("supermarket_bar_graph.png") %>% 
+              image_scale(600), "supermarket_bar_graph.png")
+
+
+# # Summary values
+# min_duration
+# max_duration
+# mean_duration
+# 
+# 
+# # Bar charts
+# bag_bar_graph
+# supermarket_bar_graph
+
+
+```
+
+
+## Self-checkout Duration
+
+From the data collected, we see that a customer using a self-service checkout 
+kiosk at a supermarket takes on average `r mean_duration` seconds to purchase 
+their groceries or other items. The fastest recorded time at a self-checkout 
+for someone to purchase their item is `r min_duration` seconds. On the contrary, 
+the longest recorded time for someone to finish purchasing their grocery at a 
+self-checkout is `r max_duration` seconds.
+
+
+## Average Self-checkout Duration Based On Supermarket
+
+Is there a difference on how long a person using a self-service checkout kiost 
+takes depending on what supermarket they go to? Using the data collected, I 
+calculated the average self-checkout duration for each of the supermarkets. The 
+following bar graph shows the average self-checkout duration depending on the 
+supermarket.
+
+![](supermarket_bar_graph.png "Bar graph of average self-checkout duration by supermarket.")
+
+
+## How many people brough their own bag?
+
+Do most people bring their own bags to use when buying groceries? Using the data 
+collected, the following bar graph shows the number of people using the self-checkout 
+who uses their own bags compared to those who did not and purchased a bag.
+
+![](bag_bar_graph.png "Bar graph of number of people use their own bags.")
+
+
