@@ -10,6 +10,12 @@ knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
 ```
 
 ```{css}
+
+html {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
 body {
   font-size: 18px;
   font-family: "Comic Sans MS", "Comic Sans", "Comfortaa", sans-serif;
@@ -38,6 +44,7 @@ h2 {
 p {
   padding: 18px;
   background-color: #FFFFFF;
+  text-align: center;
 }
 
 ```
@@ -81,6 +88,7 @@ bag_bar_graph <- ggplot(data = latest_data) +
        x = "Used their own bag",
        y = "Count")
 
+# Store bar graph as png
 ggsave("bag_bar_graph.png")
 image_write(image_read("bag_bar_graph.png") %>% 
               image_scale(600), "bag_bar_graph.png")
@@ -110,6 +118,7 @@ supermarket_bar_graph <- ggplot(supermarket_average, aes(supermarket, average_du
        x = "Supermarket",
        y = "Average Duration (in seconds)")
 
+# Store bar graph as png
 ggsave("supermarket_bar_graph.png")
 image_write(image_read("supermarket_bar_graph.png") %>% 
               image_scale(600), "supermarket_bar_graph.png")
@@ -147,7 +156,11 @@ calculated the average self-checkout duration for each of the supermarkets. The
 following bar graph shows the average self-checkout duration depending on the 
 supermarket.
 
-![](supermarket_bar_graph.png "Bar graph of average self-checkout duration by supermarket.")
+```{r}
+
+supermarket_bar_graph
+
+```
 
 
 ## How many people brough their own bag?
@@ -156,6 +169,10 @@ Do most people bring their own bags to use when buying groceries? Using the data
 collected, the following bar graph shows the number of people using the self-checkout 
 who uses their own bags compared to those who did not and purchased a bag.
 
-![](bag_bar_graph.png "Bar graph of number of people use their own bags.")
+```{r}
+
+bag_bar_graph
+
+```
 
 
